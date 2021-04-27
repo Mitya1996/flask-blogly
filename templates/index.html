@@ -8,7 +8,7 @@
 
 <div class="list-group">
     {% for user in users %}
-    <a href="/users/{{user.id}}" class="list-group-item list-group-item-action">{{user.get_full_name()}}</a>
+    <a href="/users/{{user.id}}" class="list-group-item list-group-item-action">{{user.full_name}}</a>
     {% endfor %}
 </div>
 

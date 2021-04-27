@@ -27,5 +27,9 @@ class User(db.Model):
                      unique=True)
     image_url = db.Column(db.String(), default="/static/default-user-image.png")
 
-    def get_full_name(self):
+    # def get_full_name(self):
+    #     return f'{self.first_name} {self.last_name}'
+
+    @property
+    def full_name(self):
         return f'{self.first_name} {self.last_name}'
