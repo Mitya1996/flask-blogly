@@ -26,7 +26,7 @@ def homepage():
 
 @app.route('/users')
 def read_users():
-    users = User.query.all()
+    users = User.query.order_by(User.last_name).all()
     return render_template('index.html', users=users)
 
 @app.route('/users/<int:id>')
