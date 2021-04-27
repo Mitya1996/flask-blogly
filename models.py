@@ -1,5 +1,6 @@
 """Models for Blogly."""
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 db = SQLAlchemy()
 
@@ -16,20 +17,53 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer,
-                   primary_key=True,
-                   autoincrement=True)
-    first_name = db.Column(db.String(50),
-                     nullable=False,
-                     unique=True)
-    last_name = db.Column(db.String(50),
-                     nullable=False,
-                     unique=True)
-    image_url = db.Column(db.String(), default="/static/default-user-image.png")
-
-    # def get_full_name(self):
-    #     return f'{self.first_name} {self.last_name}'
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True)
+    first_name = db.Column(
+        db.String(50),
+        nullable=False,
+        unique=True)
+    last_name = db.Column(
+        db.String(50),
+        nullable=False,
+        unique=True)
+    image_url = db.Column(
+        db.String(), 
+        default="/static/default-user-image.png")
 
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
+
+class Post(db.Model):
+    """Post."""
+
+    __tablename__ = "posts"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True)
+
+    title = db.Column(
+        db.String(50),
+        nullable=False)
+                
+    content = db.Column(
+        db.String(),
+        nullable=False)
+
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.datetime.now)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id'),
+        nullable=False
+    )
+
+    user = db.relationship('User', backref='posts')
