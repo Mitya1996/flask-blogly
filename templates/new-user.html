@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+
+<form action="/users/new" method="POST">
+
+<div class="h1">New User</div>
+
+<div class="mb-3">
+    <label for="firstName" class="form-label">First Name</label>
+    <input type="text" class="form-control" id="firstName" name="first-name">
+</div>
+<div class="mb-3">
+    <label for="lastName" class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="lastName" name="last-name">
+</div>
+<div class="mb-3">
+    <label for="image" class="form-label">Image URL</label>
+    <input type="text" class="form-control" id="image" name="image-url">
+    <div id="imgHelp" class="form-text">Valid image types include .jpg, .png, ect.</div>
+</div>
+<button class="btn btn-primary">Create</button>
+
+</form>
+
+<a href="/users" class="btn btn-danger my-3">Cancel</a>
+
+
+{% endblock %}

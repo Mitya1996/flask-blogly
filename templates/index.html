@@ -1,12 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Home</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+
+<h1>Users</h1>
+
+<div class="list-group">
+    {% for user in users %}
+    <a href="/users/{{user.id}}" class="list-group-item list-group-item-action">{{user.get_full_name()}}</a>
+    {% endfor %}
+</div>
+
+<a href="/users/new" class="btn btn-secondary my-3">Add User</a>
+
+{% endblock %}
+
