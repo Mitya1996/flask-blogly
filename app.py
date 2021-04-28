@@ -27,7 +27,8 @@ def homepage():
 @app.route('/users')
 def read_users():
     users = User.query.order_by(User.last_name).all()
-    return render_template('index.html', users=users)
+    latest_posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    return render_template('index.html', users=users, latest_posts=latest_posts)
 
 @app.route('/users/<int:id>')
 def read_user(id):

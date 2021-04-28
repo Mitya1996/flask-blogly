@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Users{% endblock %}
+{% block title %}Blogly{% endblock %}
 
 {% block content %}
 
-<h1>Users</h1>
+<h1 class="d-block text-center css-rainbow-text display-1">Blogly</h1>
+
+<h2>Users</h2>
 
 <div class="list-group">
     {% for user in users %}
@@ -12,7 +14,24 @@
     {% endfor %}
 </div>
 
-<a href="/users/new" class="btn btn-secondary my-3">Add User</a>
+<a href="/users/new" class="btn btn-primary my-3">Add User</a>
+
+<h3>Latest Posts</h3>
+
+<div class="list-group my-3">
+    {% for post in latest_posts %}
+    <a href="/posts/{{post.id}}" class="list-group-item list-group-item-action">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{post.title}}</h5>
+        <small class="text-muted">{{post.created_at.strftime("%A, %d. %B %Y %I:%M%p")}}</small>
+      </div>
+      <p class="mb-1">{{post.content[0:100]}}{% if post.content|length > 100 %}{{'...'}}{% endif %}</p>
+      <small class="text-muted">0 Comments</small>
+      <small class="text-muted float-end">By {{post.user.full_name}}</small>
+    </a>
+    {% endfor %}
+</div>
+
 
 {% endblock %}
 

@@ -25,7 +25,7 @@ class FlaskTests(TestCase):
         html = resp.get_data(as_text=True)
         #check if status code 200
         self.assertEqual(resp.status_code, 200)
-        self.assertIn('<h1>Users</h1>', html)
+        self.assertIn('Blogly', html)
 
     def test_create_user(self):
         resp = self.client.post('/users/new', data={
