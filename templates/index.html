@@ -20,7 +20,7 @@
 
 <div class="list-group my-3">
     {% for post in latest_posts %}
-    <a href="/posts/{{post.id}}" class="list-group-item list-group-item-action">
+    <a href="/posts/{{post.id}}?home=t" class="list-group-item list-group-item-action">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{post.title}}</h5>
         <small class="text-muted">{{post.created_at.strftime("%A, %d. %B %Y %I:%M%p")}}</small>

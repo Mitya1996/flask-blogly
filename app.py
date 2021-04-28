@@ -109,8 +109,9 @@ def new_post_post(id):
 
 @app.route('/posts/<int:id>')
 def read_post(id):
+    come_from_home = request.args.get('home', None)
     post = Post.query.get_or_404(id)
-    return render_template('post.html', post=post, user=post.user)
+    return render_template('post.html', post=post, user=post.user, cfh=come_from_home)
 
 
 @app.route('/posts/<int:id>/edit')
