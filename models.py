@@ -4,7 +4,6 @@ import datetime
 
 db = SQLAlchemy()
 
-
 def connect_db(app):
     """Connect to database."""
 
@@ -52,7 +51,7 @@ class Post(db.Model):
         nullable=False)
                 
     content = db.Column(
-        db.String(),
+        db.Text,
         nullable=False)
 
     created_at = db.Column(
@@ -62,7 +61,7 @@ class Post(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id'),
+        db.ForeignKey('users.id', ondelete='CASCADE'),
         nullable=False
     )
 

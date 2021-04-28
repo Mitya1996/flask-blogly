@@ -1,6 +1,6 @@
 """Seed file to make sample data for blogly db."""
 
-from models import User, db
+from models import User, Post, db
 from app import app
 
 def seed_db():
@@ -10,16 +10,22 @@ def seed_db():
 
     # If table isn't empty, empty it
     User.query.delete()
+    Post.query.delete()
 
     # Add users
     user1 = User(first_name='John', last_name="Smith")
     user2 = User(first_name='Mary', last_name="Antonova")
     user3 = User(first_name='Charles', last_name="Rodriguez")
 
-    # Add new objects to session, so they'll persist
-    db.session.add(user1)
-    db.session.add(user2)
-    db.session.add(user3)
+    # Add posts
+    post1 = Post(title='My First Post', content='Hello world!', user_id=1)
+    post2 = Post(title='Random Post', content='I love apples.\nRadio is loud.\nToday I will mop the floor.', user_id=1)
+    post3 = Post(title='Love Story', content='What is love. Baby don''t hurt me. Lorem ipsum la la dum dee boop.\nWhat is love. Baby don''t hurt me. Lorem ipsum la la dum dee boop.', user_id=1)
 
-    # Commit--otherwise, this never gets saved!
+    db.session.add_all([user1, user2, user3])
     db.session.commit()
+
+    db.session.add_all([post1, post2, post3])
+    db.session.commit()
+
+seed_db()

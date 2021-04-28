@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from verify_image import is_image_and_ready
 
 app = Flask(__name__)
@@ -32,7 +32,8 @@ def read_users():
 @app.route('/users/<int:id>')
 def read_user(id):
     user = User.query.get(id)
-    return render_template('user.html', user=user)
+    posts = user.posts[::-1] #reverse list to get first post at bottom
+    return render_template('user.html', user=user, posts=posts)
     
 @app.route('/users/<int:id>/edit')
 def update_user_get(id):
@@ -74,3 +75,45 @@ def new_user_post():
     db.session.add(user)
     db.session.commit()
     return redirect(f'/users/{user.id}')
+
+@app.route('/users/<int:id>/posts/new')
+def new_post_get(id):
+    user = User.query.get(id)
+    return render_template('new-post.html', user=user)
+
+@app.route('/users/<int:id>/posts/new', methods=['POST'])
+def new_post_post(id):
+    title = request.form['post-title']
+    content = request.form['post-content']
+    post = Post(title=title, content=content, user_id=id)
+    db.session.add(post)
+    db.session.commit()
+    return redirect(f'/users/{id}')
+
+
+@app.route('/posts/<int:id>')
+def read_post(id):
+    post = Post.query.get(id)
+    return render_template('post.html', post=post, user=post.user)
+
+
+@app.route('/posts/<int:id>/edit')
+def edit_post(id):
+    post = Post.query.get(id)
+    return render_template('edit-post.html', post=post, user=post.user)
+
+@app.route('/posts/<int:id>/edit', methods=['POST'])
+def edit_post_post(id):
+    title = request.form['post-title']
+    content = request.form['post-content']
+    post = Post.query.get(id)
+    post.title = title
+    post.content = content
+    db.session.commit()
+    return redirect(f'/posts/{id}')
+
+@app.route('/posts/<int:id>/delete', methods=['POST'])
+def delete_post(id):
+    Post.query.filter_by(id=id).delete()
+    db.session.commit()
+    return redirect(f'/users/{id}')

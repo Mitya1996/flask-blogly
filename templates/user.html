@@ -16,5 +16,20 @@
     </div>
 </div>
 
+<div class="my-3"><a class="btn btn-primary" href="/users/{{user.id}}/posts/new" role="button">Add Post</a></div>
+
+<div class="list-group my-3">
+    {% for post in posts %}
+    <a href="/posts/{{post.id}}" class="list-group-item list-group-item-action">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{post.title}}</h5>
+        <small class="text-muted">{{post.created_at}}</small>
+      </div>
+      <p class="mb-1">{{post.content[0:100]}}{% if post.content|length > 100 %}{{'...'}}{% endif %}</p>
+      <small class="text-muted">0 Comments</small>
+    </a>
+    {% endfor %}
+</div>
+
 
 {% endblock %}
