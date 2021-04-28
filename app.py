@@ -31,13 +31,13 @@ def read_users():
 
 @app.route('/users/<int:id>')
 def read_user(id):
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
     posts = user.posts[::-1] #reverse list to get first post at bottom
     return render_template('user.html', user=user, posts=posts)
     
 @app.route('/users/<int:id>/edit')
 def update_user_get(id):
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
     return render_template('edit-user.html', user=user)
 
 @app.route('/users/<int:id>/edit', methods=['POST'])
@@ -46,7 +46,7 @@ def update_user_post(id):
     last_name = request.form['last-name']
     image_url = request.form['image-url']
 
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
     user.first_name = first_name
     user.last_name = last_name
     if is_image_and_ready(image_url):
@@ -78,7 +78,7 @@ def new_user_post():
 
 @app.route('/users/<int:id>/posts/new')
 def new_post_get(id):
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
     return render_template('new-post.html', user=user)
 
 @app.route('/users/<int:id>/posts/new', methods=['POST'])
@@ -93,20 +93,20 @@ def new_post_post(id):
 
 @app.route('/posts/<int:id>')
 def read_post(id):
-    post = Post.query.get(id)
+    post = Post.query.get_or_404(id)
     return render_template('post.html', post=post, user=post.user)
 
 
 @app.route('/posts/<int:id>/edit')
 def edit_post(id):
-    post = Post.query.get(id)
+    post = Post.query.get_or_404(id)
     return render_template('edit-post.html', post=post, user=post.user)
 
 @app.route('/posts/<int:id>/edit', methods=['POST'])
 def edit_post_post(id):
     title = request.form['post-title']
     content = request.form['post-content']
-    post = Post.query.get(id)
+    post = Post.query.get_or_404(id)
     post.title = title
     post.content = content
     db.session.commit()
@@ -117,3 +117,8 @@ def delete_post(id):
     Post.query.filter_by(id=id).delete()
     db.session.commit()
     return redirect(f'/users/{id}')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
