@@ -114,9 +114,11 @@ def edit_post_post(id):
 
 @app.route('/posts/<int:id>/delete', methods=['POST'])
 def delete_post(id):
+    post = Post.query.get_or_404(id)
+    user_id = post.user_id
     Post.query.filter_by(id=id).delete()
     db.session.commit()
-    return redirect(f'/users/{id}')
+    return redirect(f'/users/{user_id}')
 
 @app.errorhandler(404)
 def page_not_found(e):
