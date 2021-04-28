@@ -17,7 +17,7 @@
     <input type="text" class="form-control" id="lastName" name="last-name">
 </div>
 <div class="mb-3">
-    <label for="image" class="form-label">Image URL</label>
+    <label for="image" class="form-label">Image URL <span class="fw-lighter">(optional)</span></label>
     <input type="text" class="form-control" id="image" name="image-url">
     <div id="imgHelp" class="form-text">Valid image types include .jpg, .png, ect.</div>
 </div>
@@ -26,6 +26,9 @@
 </form>
 
 <a href="/users" class="btn btn-danger my-3">Cancel</a>
+
+
+{% include 'flash-alerts.html' %}
 
 
 {% endblock %}

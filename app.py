@@ -1,6 +1,6 @@
 """Blogly application."""
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post
 from verify_image import is_image_and_ready
@@ -68,7 +68,15 @@ def new_user_get():
 def new_user_post():
     first_name = request.form['first-name']
     last_name = request.form['last-name']
-    image_url = request.form['image-url'] 
+    image_url = request.form['image-url']
+    #verify valid input
+    if not first_name:
+        flash('The user must have a first name.')
+        return redirect(f'/users/new')
+    if not last_name:
+        flash('The user must have a last name.')
+        return redirect(f'/users/new')  
+
     if not is_image_and_ready(image_url): #check if img valid
         image_url = None
     user = User(first_name=first_name, last_name=last_name, image_url=image_url)
@@ -85,6 +93,13 @@ def new_post_get(id):
 def new_post_post(id):
     title = request.form['post-title']
     content = request.form['post-content']
+    #verify valid input
+    if not title:
+        flash('The post must have a title.')
+        return redirect(f'/users/{id}/posts/new')
+    if not content:
+        flash('The post must have content.')
+        return redirect(f'/users/{id}/posts/new')    
     post = Post(title=title, content=content, user_id=id)
     db.session.add(post)
     db.session.commit()
