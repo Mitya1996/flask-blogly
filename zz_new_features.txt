@@ -1,0 +1,6 @@
+hover over tags button to see tags
+
+edit button within this hover over component
+/route to 
+
+autofill when creating new user for the text input of all tags

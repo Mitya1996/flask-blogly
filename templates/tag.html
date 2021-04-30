@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+
+<h1>{{tag.name}}</h1>
+
+<a class="btn btn-primary" href="/tags/{{tag.id}}/edit" role="button">Edit</a>
+<form class="d-inline" action="/tags/{{tag.id}}/delete" method="POST">
+    <button class="btn btn-danger" role="button">Delete</button>
+</form>
+
+<p class="my-3">{{tag.name}} posts:</p>
+
+{% include 'posts-list.html' %}
+
+<div class="my-3"><button class="btn btn-link" onclick="history.back()">Back</button></div>
+
+
+{% endblock %}

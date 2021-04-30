@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 from verify_image import is_image_and_ready
 
 app = Flask(__name__)
@@ -20,15 +20,16 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 db.create_all()
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
 @app.route('/')
 def homepage():
-    return redirect('/users')
-
-@app.route('/users')
-def read_users():
     users = User.query.order_by(User.last_name).all()
     latest_posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
-    return render_template('index.html', users=users, latest_posts=latest_posts)
+    return render_template('index.html', users=users, posts=latest_posts)
 
 @app.route('/users/<int:id>')
 def read_user(id):
@@ -109,9 +110,8 @@ def new_post_post(id):
 
 @app.route('/posts/<int:id>')
 def read_post(id):
-    come_from_home = request.args.get('home', None)
     post = Post.query.get_or_404(id)
-    return render_template('post.html', post=post, user=post.user, cfh=come_from_home)
+    return render_template('post.html', post=post, user=post.user)
 
 
 @app.route('/posts/<int:id>/edit')
@@ -137,7 +137,12 @@ def delete_post(id):
     db.session.commit()
     return redirect(f'/users/{user_id}')
 
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template('404.html'), 404
+@app.route('/tags')
+def tags_read():
+    tags = Tag.query.all()
+    return render_template('tags.html', tags=tags)
+
+@app.route('/tags/<int:id>')
+def tag_read(id):
+    tag = Tag.query.get(id)
+    return render_template('tag.html', tag=tag, posts=tag.posts)
