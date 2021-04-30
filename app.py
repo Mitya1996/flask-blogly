@@ -60,7 +60,7 @@ def update_user_post(id):
 def delete_user(id):
     User.query.filter_by(id=id).delete()
     db.session.commit()
-    return redirect(f'/users')
+    return redirect(f'/')
 
 @app.route('/users/new')
 def new_user_get():
