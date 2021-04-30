@@ -8,14 +8,19 @@
 
 <p style="white-space: pre-line;">{{post.content}}</p>
 
-<p class="fw-lighter">Posted by {{user.full_name}}</p>
+<p class="fw-lighter">Posted by <a href="/users/{{post.user.id}}">{{user.full_name}}</a></p>
+
+<div class="my-3">
+{% for tag in post.tags %}
+<span class="badge rounded-pill bg-success">{{tag.name}}</span>
+{% endfor %}
+</div>
 
 <a class="btn btn-primary" href="/posts/{{post.id}}/edit" role="button">Edit</a>
 <form class="d-inline" action="/posts/{{post.id}}/delete" method="POST">
     <button class="btn btn-danger" role="button">Delete</button>
 </form>
-<div class="my-3">
-    <button class="btn btn-link" onclick="history.back()">Back</button>
-</div>
+
+<a href="/users/{{post.user.id}}" class="btn btn-link">to author</a>
 
 {% endblock %}

@@ -4,18 +4,9 @@
 
 {% block content %}
 
-<h1 class="d-block text-center css-rainbow-text display-1">Blogly</h1>
+<h1 class="my-3">Welcome to Blogly!</h1>
 
-<h2>Users</h2>
-
-<div class="list-group">
-    {% for user in users %}
-    <a href="/users/{{user.id}}" class="list-group-item list-group-item-action">{{user.full_name}}</a>
-    {% endfor %}
-</div>
-
-<a href="/users/new" class="btn btn-primary my-3">Add User</a>
-<a href="/tags" class="btn btn-success my-3 float-end">Tags</a>
+<p class="mb-5">This is a simple blogging application where <i>users</i>, <i>posts</i>, and <i>tags</i> can be created, read, updated and destroyed. Created with Flask, PostgreSQL, and Twitter Bootstrap.</p>
 
 <h3>Latest Posts</h3>
 

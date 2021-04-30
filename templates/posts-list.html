@@ -10,6 +10,9 @@
       <p class="mb-1">{{post.content[0:100]}}{% if post.content|length > 100 %}{{'...'}}{% endif %}</p>
       <small class="text-muted">0 Comments</small>
       <small class="text-muted float-end">By {{post.user.full_name}}</small>
+      {% for tag in post.tags %}
+      <span class="badge rounded-pill bg-success">{{tag.name}}</span>
+      {% endfor %}
     </a>
     {% endfor %}
 </div>

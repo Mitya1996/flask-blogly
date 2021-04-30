@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}New Tag{% endblock %}
+
+{% block content %}
+
+<form action="/tags/new" method="POST" id="new-tag-form">
+
+<div class="h1">New Tag</div>
+
+<div class="mb-3">
+    <label for="tag-name" class="form-label">Name</label>
+    <input type="text" class="form-control" id="tag-name" name="tag-name">
+</div>
+
+</form>
+
+<button class="btn btn-primary" type="submit" form="new-tag-form">Create</button>
+<button class="btn btn-danger" onclick="history.back()">Cancel</button>
+
+
+{% include 'flash-alerts.html' %}
+
+
+{% endblock %}

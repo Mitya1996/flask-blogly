@@ -27,9 +27,13 @@ def page_not_found(e):
 
 @app.route('/')
 def homepage():
-    users = User.query.order_by(User.last_name).all()
     latest_posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
-    return render_template('index.html', users=users, posts=latest_posts)
+    return render_template('index.html', posts=latest_posts)
+
+@app.route('/users')
+def users():
+    users = User.query.order_by(User.last_name).all()
+    return render_template('users.html', users=users)
 
 @app.route('/users/<int:id>')
 def read_user(id):
@@ -89,22 +93,30 @@ def new_user_post():
 @app.route('/users/<int:id>/posts/new')
 def new_post_get(id):
     user = User.query.get_or_404(id)
-    return render_template('new-post.html', user=user)
+    tags = Tag.query.all()
+    return render_template('new-post.html', user=user, tags=tags)
 
 @app.route('/users/<int:id>/posts/new', methods=['POST'])
 def new_post_post(id):
     title = request.form['post-title']
     content = request.form['post-content']
+    tags_list = request.form.getlist('checkbox')
     #verify valid input
     if not title:
         flash('The post must have a title.')
         return redirect(f'/users/{id}/posts/new')
     if not content:
         flash('The post must have content.')
-        return redirect(f'/users/{id}/posts/new')    
-    post = Post(title=title, content=content, user_id=id)
+        return redirect(f'/users/{id}/posts/new')  
+    #add post and tags  
+    post = Post(title=title, content=content, user_id=id)        
     db.session.add(post)
     db.session.commit()
+    if tags_list:
+        for tag in tags_list:
+            post_tag = PostTag(post_id=post.id, tag_id=int(tag))
+            db.session.add(post_tag)
+            db.session.commit()
     return redirect(f'/users/{id}')
 
 
@@ -117,16 +129,25 @@ def read_post(id):
 @app.route('/posts/<int:id>/edit')
 def edit_post(id):
     post = Post.query.get_or_404(id)
-    return render_template('edit-post.html', post=post, user=post.user)
+    tags = Tag.query.all()
+    return render_template('edit-post.html', post=post, user=post.user, tags=tags)
 
-@app.route('/posts/<int:id>/edit', methods=['POST'])
+@app.route('/posts/<int:id>/edit', methods=['POST']) ###
 def edit_post_post(id):
     title = request.form['post-title']
     content = request.form['post-content']
+    tags_list = request.form.getlist('checkbox')
     post = Post.query.get_or_404(id)
     post.title = title
     post.content = content
     db.session.commit()
+    PostTag.query.filter(PostTag.post_id == id).delete() #delete any existing tags
+    db.session.commit() #update tags
+    if tags_list:
+        for tag in tags_list:
+            post_tag = PostTag(post_id=post.id, tag_id=int(tag))
+            db.session.add(post_tag)
+            db.session.commit()
     return redirect(f'/posts/{id}')
 
 @app.route('/posts/<int:id>/delete', methods=['POST'])
@@ -142,7 +163,21 @@ def tags_read():
     tags = Tag.query.all()
     return render_template('tags.html', tags=tags)
 
+@app.route('/tags/new')
+def tag_create_get():
+    return render_template('new-tag.html')
+
+@app.route('/tags/new', methods=['POST'])
+def tag_create_post():
+    name = request.form['tag-name']
+    tag = Tag(name=name)
+    db.session.add(tag)
+    db.session.commit()
+    return redirect('/tags')
+
 @app.route('/tags/<int:id>')
 def tag_read(id):
     tag = Tag.query.get(id)
     return render_template('tag.html', tag=tag, posts=tag.posts)
+
+

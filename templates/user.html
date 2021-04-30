@@ -5,14 +5,13 @@
 {% block content %}
 
 <div class="row">
-    <div class="col col-sm-3"><img class="img-fluid" src="{{user.image_url}}" alt="profile-image"></div>
+    <div class="col col-sm-3"><img class="img-fluid rounded" src="{{user.image_url}}" alt="profile-image"></div>
     <div class="col col-sm-9">
         <div class="h1">{{user.full_name}}</div>
         <a class="btn btn-primary" href="/users/{{user.id}}/edit" role="button">Edit</a>
         <form class="d-inline" action="/users/{{user.id}}/delete" method="POST">
             <button class="btn btn-danger" role="button">Delete</button>
         </form>
-        <div class="my-3"><button class="btn btn-link" onclick="history.back()">Back</button></div>
     </div>
 </div>
 

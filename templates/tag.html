@@ -4,14 +4,16 @@
 
 {% block content %}
 
-<h1>{{tag.name}}</h1>
+<h1 class="mt-3">{{tag.name}}</h1>
+
+<div class="mb-3"><span class="badge rounded-pill bg-success">{{tag.name}}</span></div>
 
 <a class="btn btn-primary" href="/tags/{{tag.id}}/edit" role="button">Edit</a>
 <form class="d-inline" action="/tags/{{tag.id}}/delete" method="POST">
     <button class="btn btn-danger" role="button">Delete</button>
 </form>
 
-<p class="my-3">{{tag.name}} posts:</p>
+<p class="my-3">Associated posts:</p>
 
 {% include 'posts-list.html' %}
 
