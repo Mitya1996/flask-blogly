@@ -123,7 +123,7 @@ def new_post_post(id):
 @app.route('/posts/<int:id>')
 def read_post(id):
     post = Post.query.get_or_404(id)
-    comments = Comment.query.order_by(Comment.created_at.desc()).all()
+    comments = Comment.query.filter(Comment.post_id == id).order_by(Comment.created_at.desc()).all()
     all_users = User.query.all()
     return render_template('post.html', post=post, user=post.user, comments=comments, all_users=all_users)
 
@@ -199,7 +199,7 @@ def new_comment():
         flash('Post must be made by a valid user.')
         return redirect(f'/posts/{post_id}')
     text = request.form['comment-text']
-    comment = Comment(post_id=3, user_id=user.id, text=text)
+    comment = Comment(post_id=post_id, user_id=user.id, text=text)
     db.session.add(comment)
     db.session.commit()
     return redirect(f'/posts/{post_id}')
