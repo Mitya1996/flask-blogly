@@ -172,6 +172,9 @@ def tag_create_get():
 @app.route('/tags/new', methods=['POST'])
 def tag_create_post():
     name = request.form['tag-name']
+    if not name:
+        flash('Tag must not be empty.')
+        return redirect(f'/tags/new')
     tag = Tag(name=name)
     db.session.add(tag)
     db.session.commit()

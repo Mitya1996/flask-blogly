@@ -25,7 +25,7 @@
 
 <form action="/comments/new?post-id={{post.id}}" method="POST" class="mt-5 mb-3">
 
-    <input class="form-control" list="datalistOptions" id="comment-author" placeholder="Author" name="comment-author">
+    <input class="form-control" list="datalistOptions" id="comment-author" placeholder="Comment by" name="comment-author">
     <datalist id="datalistOptions">
         {% for user in all_users %}
         <option value="{{user.full_name}}">
