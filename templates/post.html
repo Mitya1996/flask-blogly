@@ -23,4 +23,28 @@
 
 <a href="/users/{{post.user.id}}" class="btn btn-link">to author</a>
 
+<form action="/comments/new?post-id={{post.id}}" method="POST" class="mt-5 mb-3">
+
+    <input class="form-control" list="datalistOptions" id="comment-author" placeholder="Author" name="comment-author">
+    <datalist id="datalistOptions">
+        {% for user in all_users %}
+        <option value="{{user.full_name}}">
+        {% endfor %}
+    </datalist>
+
+    <div class="mb-3 mt-1">
+        <textarea class="form-control" id="comment-text" rows="3" wrap="hard" style="white-space: pre-wrap;" placeholder="Add comment..." name="comment-text"></textarea>
+    </div>
+    <button class="btn btn-secondary">Submit</button>
+</form>
+
+{% include 'flash-alerts.html' %}
+
+{% for comment in comments %}
+<div>
+    <p><strong>{{comment.author.full_name}}</strong> on <span class="text-muted">{{comment.created_at.strftime("%A, %d. %B %Y %I:%M%p")}}</span></p>
+    <p>{{comment.text}}</p>
+</div>
+{% endfor %}
+
 {% endblock %}

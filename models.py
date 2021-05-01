@@ -69,7 +69,7 @@ class Post(db.Model):
 
 
 class Tag(db.Model):
-    """Post."""
+    """Tag."""
 
     __tablename__ = "tags"
 
@@ -90,7 +90,7 @@ class Tag(db.Model):
     )
 
 class PostTag(db.Model):
-    """Post."""
+    """PostTag."""
 
     __tablename__ = "posts_tags"
 
@@ -103,3 +103,33 @@ class PostTag(db.Model):
         db.Integer,
         db.ForeignKey('tags.id', ondelete='CASCADE'),
         primary_key=True)
+
+
+class Comment(db.Model):
+    """Comment."""
+
+    __tablename__ = "comments"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True)
+
+    post_id = db.Column(
+        db.Integer,
+        db.ForeignKey('posts.id', ondelete='CASCADE'))
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='CASCADE'))
+
+    text = db.Column(
+        db.Text,
+        nullable=False)
+
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.datetime.now)
+
+    post = db.relationship('Post', backref='comments')
+    author = db.relationship('User', backref='comments')

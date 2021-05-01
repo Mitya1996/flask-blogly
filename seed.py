@@ -1,6 +1,6 @@
 """Seed file to make sample data for blogly db."""
 
-from models import User, Post, Tag, PostTag, db
+from models import User, Post, Tag, PostTag, Comment, db
 from app import app
 
 def seed_db():
@@ -43,6 +43,11 @@ def seed_db():
     post_tag4 = PostTag(post_id=3, tag_id=2)
     post_tag5 = PostTag(post_id=2, tag_id=2)
     db.session.add_all([post_tag1, post_tag2, post_tag3, post_tag4, post_tag5])
+    db.session.commit()
+
+    comment1 = Comment(post_id=3, user_id=2, text="Wow what a great post!")
+    comment2 = Comment(post_id=3, user_id=3, text="Dumb...")
+    db.session.add_all([comment1, comment2])
     db.session.commit()
 
 

@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post, Tag, PostTag
+from models import db, connect_db, User, Post, Tag, PostTag, Comment
 from verify_image import is_image_and_ready
 
 app = Flask(__name__)
@@ -123,7 +123,9 @@ def new_post_post(id):
 @app.route('/posts/<int:id>')
 def read_post(id):
     post = Post.query.get_or_404(id)
-    return render_template('post.html', post=post, user=post.user)
+    comments = Comment.query.order_by(Comment.created_at.desc()).all()
+    all_users = User.query.all()
+    return render_template('post.html', post=post, user=post.user, comments=comments, all_users=all_users)
 
 
 @app.route('/posts/<int:id>/edit')
@@ -180,4 +182,24 @@ def tag_read(id):
     tag = Tag.query.get(id)
     return render_template('tag.html', tag=tag, posts=tag.posts)
 
-
+@app.route('/comments/new', methods=['POST'])
+def new_comment():
+    post_id = request.args['post-id']
+    author = request.form['comment-author']
+    names_arr = author.split()
+    #check validity
+    try:
+        first_name = names_arr[0]
+        last_name = names_arr[1]
+    except:
+        flash('Post must be made by a valid user.')
+        return redirect(f'/posts/{post_id}')
+    user = User.query.filter(User.first_name == first_name, User.last_name == last_name).first()
+    if not user:
+        flash('Post must be made by a valid user.')
+        return redirect(f'/posts/{post_id}')
+    text = request.form['comment-text']
+    comment = Comment(post_id=3, user_id=user.id, text=text)
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(f'/posts/{post_id}')
