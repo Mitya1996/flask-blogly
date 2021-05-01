@@ -186,6 +186,7 @@ def tag_read(id):
 def new_comment():
     post_id = request.args['post-id']
     author = request.form['comment-author']
+    text = request.form['comment-text']
     names_arr = author.split()
     #check validity
     try:
@@ -198,7 +199,9 @@ def new_comment():
     if not user:
         flash('Post must be made by a valid user.')
         return redirect(f'/posts/{post_id}')
-    text = request.form['comment-text']
+    if not text:
+        flash('Comment must not be empty.')
+        return redirect(f'/posts/{post_id}')
     comment = Comment(post_id=post_id, user_id=user.id, text=text)
     db.session.add(comment)
     db.session.commit()
