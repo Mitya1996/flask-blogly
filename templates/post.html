@@ -42,7 +42,7 @@
 
 {% for comment in comments %}
 <div>
-    <p><strong>{{comment.author.full_name}}</strong> on <span class="text-muted">{{comment.created_at.strftime("%A, %d. %B %Y %I:%M%p")}}</span></p>
+    <span><strong>{{comment.author.full_name}}</strong> on <span class="text-muted">{{comment.created_at.strftime("%A, %d. %B %Y %I:%M%p")}}</span></span><a href="/comments/{{comment.id}}/delete?post-id={{post.id}}"><i class="fas fa-trash-alt text-danger mx-3"></i></a>
     <p>{{comment.text}}</p>
 </div>
 {% endfor %}

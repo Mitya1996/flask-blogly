@@ -196,16 +196,23 @@ def new_comment():
         first_name = names_arr[0]
         last_name = names_arr[1]
     except:
-        flash('Post must be made by a valid user.')
+        flash('Comment must be made by a valid user.')
         return redirect(f'/posts/{post_id}')
     user = User.query.filter(User.first_name == first_name, User.last_name == last_name).first()
     if not user:
-        flash('Post must be made by a valid user.')
+        flash('Comment must be made by a valid user.')
         return redirect(f'/posts/{post_id}')
     if not text:
         flash('Comment must not be empty.')
         return redirect(f'/posts/{post_id}')
     comment = Comment(post_id=post_id, user_id=user.id, text=text)
     db.session.add(comment)
+    db.session.commit()
+    return redirect(f'/posts/{post_id}')
+
+@app.route('/comments/<int:id>/delete')
+def delete_comment(id):
+    post_id = request.args['post-id']
+    Comment.query.filter_by(id=id).delete()
     db.session.commit()
     return redirect(f'/posts/{post_id}')
